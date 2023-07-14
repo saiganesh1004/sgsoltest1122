@@ -1,0 +1,17 @@
+<tr>
+           <td align="right">EMAIL:</td>
+           <td><input type="text" id="email"/></td>
+          
+       </tr> 
+       <tr>
+           <td align="right">PASSWORD:</td>
+           <td><input type="text" id="password"/></td>
+       </tr>
+        <tr>
+            <td align="right"></td>
+            <td><input type="button" id="Login" value="LOGIN"/></td>
+        </tr>
+        <tr>
+            <td align="right"></td>
+            <td><a href="New registration.html">New Registration</a></td>
+        </tr>

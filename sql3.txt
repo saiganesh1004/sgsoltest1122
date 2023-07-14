@@ -1,0 +1,29 @@
+create proc IncomeExpenseReportDetails_Ex
+(@fromdate date,
+@todate date
+)
+as
+begin
+declare @m varchar(40);
+set @m = datename(month,@fromdate);
+declare @y int;
+set @y = datename(year,@fromdate);
+
+declare @monthyear varchar(40);
+set @monthyear = @m +' ' +cast(@y as varchar(40));
+
+declare @income int;
+select @income = (select sum(income) from FamilyMembers_details);
+
+
+declare @totalexpense int;
+select @totalexpense = (select sum(Amount) from Family_Expense_details_table where Date_of_expense between @fromdate and @todate);
+
+
+
+declare @netincome int;
+select @netincome = @income - @totalexpense;
+
+select @monthyear as 'MonthYear',@income as 'Income',@totalexpense as 'Expense',@netincome as 'NetIncome';
+
+end

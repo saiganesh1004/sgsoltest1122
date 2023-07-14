@@ -1,0 +1,26 @@
+copy the below code inside the button click method
+------------------------------------------------------------
+
+ DataSet ds = new DataSet();
+            string cns = ConfigurationManager.ConnectionStrings["scn"].ConnectionString;
+            using (SqlConnection cn = new SqlConnection(cns))
+            {
+                using (SqlCommand cmd = new SqlCommand("IncomeExpenseReportDetails_Ex", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    SqlParameter p1 = new SqlParameter("@fromdate", SqlDbType.DateTime);
+                    p1.Value = tbfromdate.Text;
+                    SqlParameter p2 = new SqlParameter("@todate", SqlDbType.DateTime);
+                    p2.Value = tbtodate.Text;
+                    cmd.Parameters.Add(p1);
+                    cmd.Parameters.Add(p2);
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+
+                        da.Fill(ds);
+                        incomeandexpensegridview.DataSource = ds;
+                        incomeandexpensegridview.DataBind();
+                    }
+
+                }
+            }

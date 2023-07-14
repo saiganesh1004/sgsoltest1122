@@ -1,0 +1,163 @@
+protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                string NextEid = GetNextEidForAddingNewExpense();
+                tbeid.Text = NextEid;
+
+                GetNames_IntoDropDown();
+            }
+        }
+
+        public string GetNextEidForAddingNewExpense()
+        {
+            string NextEid;
+            string cns = ConfigurationManager.ConnectionStrings["scn"].ConnectionString;
+            using (SqlConnection cn = new SqlConnection(cns))
+            {
+                using (SqlCommand cmd = new SqlCommand("GetnextEidvalue_ForAddingNewExpense", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    SqlParameter p1 = new SqlParameter("@eid", SqlDbType.Int);
+                    p1.Direction = ParameterDirection.Output; ;
+                    cmd.Parameters.Add(p1);
+                    try
+                    {
+                        cn.Open();
+                        cmd.ExecuteNonQuery();
+                         NextEid = p1.Value.ToString();
+
+                    }
+                    catch (SqlException ex)
+                    {
+                        throw ex;
+                    }
+                    finally
+                    {
+                        if (cn.State == ConnectionState.Open)
+                        {
+                            cn.Close();
+                        }
+                    }
+
+                }
+            }
+            return NextEid;
+        }
+
+        public void GetNames_IntoDropDown()
+        {
+            List<string> lstnames = new List<string>();
+            lstnames.Add("Select");
+            string cns = ConfigurationManager.ConnectionStrings["scn"].ConnectionString;
+            using (SqlConnection cn = new SqlConnection(cns))
+            {
+                using (SqlCommand cmd = new SqlCommand("Get_Names_into_Dropdown_ForAddingNewExpense", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    try
+                    {
+                        cn.Open();
+                        SqlDataReader dr = cmd.ExecuteReader();
+
+                        while (dr.Read())
+                        {
+                            lstnames.Add(dr["Name"].ToString());
+                        }
+                        ddlname.DataSource = lstnames;
+                        ddlname.DataBind();
+                        
+                        dr.Close();
+                    }
+                    catch (SqlException ex)
+                    {
+                        throw ex;
+                    }
+                    finally
+                    {
+                        if (cn.State == ConnectionState.Open)
+                        {
+                            cn.Close();
+                        }
+
+                    }
+                }
+            }
+
+        }
+
+          
+
+        public void AllExpenseDetails()
+        {
+            DataSet ds = new DataSet();
+            string cns = ConfigurationManager.ConnectionStrings["scn"].ConnectionString;
+            using (SqlConnection cn = new SqlConnection(cns))
+            {
+                using (SqlCommand cmd = new SqlCommand("ShowAllExpenses", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+
+                        da.Fill(ds);
+                        expensedetailsgridview.DataSource = ds;
+                        expensedetailsgridview.DataBind();
+                    }
+                }
+            }
+           
+        }
+
+        protected void btn_submit_Click(object sender, EventArgs e)
+        {
+            string cns = ConfigurationManager.ConnectionStrings["scn"].ConnectionString;
+            using (SqlConnection cn = new SqlConnection(cns))
+            {
+                using (SqlCommand cmd = new SqlCommand("AddNewExpenseDetail", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    SqlParameter p1 = new SqlParameter("@eid", SqlDbType.Int);
+                    p1.Value = Convert.ToInt32(tbeid.Text);
+                    SqlParameter p2 = new SqlParameter("@name", SqlDbType.VarChar, 40);
+                    p2.Value = ddlname.SelectedValue;
+                    SqlParameter p3 = new SqlParameter("@purpose", SqlDbType.VarChar, 40);
+                    p3.Value = tbpurpose.Text;
+                    SqlParameter p4 = new SqlParameter("@amount", SqlDbType.Int);
+                    p4.Value = Convert.ToInt32(tbamount.Text);
+                    SqlParameter p5 = new SqlParameter("@date", SqlDbType.Date);
+                    p5.Value = tbdate.Text;
+
+                    cmd.Parameters.Add(p1);
+                    cmd.Parameters.Add(p2);
+                    cmd.Parameters.Add(p3);
+                    cmd.Parameters.Add(p4);
+                    cmd.Parameters.Add(p5);
+
+                    try
+                    {
+                        cn.Open();
+                        cmd.ExecuteNonQuery();
+                        AllExpenseDetails();
+                    }
+                    catch (SqlException ex)
+                    {
+                        throw ex;
+                    }
+                    finally
+                    {
+                        if (cn.State == ConnectionState.Open)
+                        {
+                            cn.Close();
+                        }
+                    }
+
+                }
+            }
+
+        }
+
+        protected void btn_cancel_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("expensedetails.aspx");
+        }

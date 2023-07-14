@@ -1,0 +1,60 @@
+create proc ViewFamilyMemberDetails
+as
+begin
+select Mid,Name,Cell_No,Work,Income from FamilyMembers_details;
+end
+
+******************************************************************************************
+
+create proc Edit_Family_Member
+(@mid int,
+@name varchar(40),
+@cell varchar(40),
+@work varchar(40),
+@income int
+)
+as
+begin
+update FamilyMembers_details set Name=@name,Cell_No=@cell,Work=@work,Income = @income where Mid=@mid
+end
+
+**********************************************************************************************************************
+
+create proc Delete_Member
+(@mid int
+)as
+begin
+delete FamilyMembers_details where Mid = @mid;
+end
+
+************************************************************************************************
+
+create proc getnextmidvalue_foraddingnewmember
+(@mid int output)
+as
+begin
+select @mid = max(mid)+1 from FamilyMembers_details;
+end
+
+**************************************************************************************
+
+create proc AddNewFamilyMember
+(@mid int,
+@name varchar(40),
+@role varchar(40),
+@cell varchar(40),
+@passcode varchar(40),
+@work varchar(40),
+@income int
+)
+as
+begin
+
+insert into FamilyMembers_details values(@mid,@name,@cell,@passcode,@work,@income);
+
+end
+
+
+********************************************************************************************************************************************************************
+
+

@@ -1,0 +1,37 @@
+<link rel="stylesheet" href="StyleSheet1.css"/>
+style="background-color:#f8c289"
+
+border="0" cellspacing="0" dir="auto"
+
+
+<tr>
+            <td align="left">Sid:</td>
+            <td><input type="text" id="sid"/></td>
+        </tr>
+        <tr>
+            <td align="left">FName:</td>
+            <td><input type="text" id="fname" class="AB"/></td>
+        </tr>
+        <tr>
+            <td align="left">LName:</td>
+            <td><input type="text" id="lname"/></td>
+           
+        </tr>
+        <tr>
+            <td align="left">Bg:</td>
+            <td><input type="checkbox" id="chn" class="AB" />O+ve
+            <input type="checkbox" id="chn" class="AB" />O-ve
+            <input type="checkbox" id="chn" class="AB"/>b+ve</td>
+        </tr>
+        <tr>
+            <td align="left">State:</td>
+            <td><select>
+                <option>       </option>
+                <option>AP</option>
+                <option>KA</option>
+                </select></td>
+        </tr>
+        <tr>
+            <td accesskey="right"></td>
+            <td><input type="submit" id="dtl" value="Submit"/></td>
+        </tr>

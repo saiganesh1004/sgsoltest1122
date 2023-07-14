@@ -1,0 +1,120 @@
+*****************************************************************
+create proc ShowAllExpenses
+as
+begin
+select E1.Eid,M1.Name,E1.Purpose,E1.Amount,E1.Date_of_expense from Family_Expense_details_table E1
+join FamilyMembers_details M1 on E1.Mid = M1.Mid;
+
+end
+
+********************************************************************************************************************
+
+create proc ShowParticularPersonExpense
+(@name varchar(40)
+)
+as
+begin
+
+select E1.Eid,M1.Name,E1.Purpose,E1.Amount,E1.Date_of_expense from Family_Expense_details_table E1
+join FamilyMembers_details M1 on E1.Mid = M1.Mid and M1.Name = @name;
+
+end
+
+***************************************************************************************************************************************
+
+
+create proc FromToDate_Expense_Details
+(@from date,
+@to date
+)
+as
+begin
+
+select E1.Eid,M1.Name,E1.Purpose,E1.Amount,E1.Date_of_expense from Family_Expense_details_table E1
+join FamilyMembers_details M1 on (E1.Date_of_expense between @from and @to)  and E1.Mid = M1.Mid;
+end
+
+
+*********************************************************************************************************************************************************
+create proc GetnextEidvalue_ForAddingNewExpense
+(@eid int output
+)
+as
+begin
+
+select @eid = max(eid)+1 from Family_Expense_details_table;
+
+end
+
+
+*********************************************************************************************************************************************
+create proc Get_Names_into_Dropdown_ForAddingNewExpense
+as
+begin
+select name from FamilyMembers_details;
+
+end
+
+**********************************************************************
+
+create proc AddNewExpenseDetail
+(@eid int,
+@name varchar(40),
+@purpose varchar(40),
+@amount int,
+@date date
+)as
+begin
+
+insert into Family_Expense_details_table values(@eid,(select Mid from FamilyMembers_details where Name = @name),@purpose,@amount,@date);
+
+end
+
+********************************************************************************
+
+create proc Delete_ExpenseDetails
+(@eid int
+)
+as
+begin
+delete from Family_Expense_details_table where Eid = @eid;
+end
+
+*************************************************************************************************************************
+create proc getall_details_to_editexpense
+(@eid int,
+@name varchar(40) output,
+@purpose varchar(40) output,
+@amount int output,
+@date date output
+)
+as
+begin
+declare @mid int;
+set @mid = (select mid from Family_Expense_details_table where Eid =@eid);
+
+select @name = (select name from FamilyMembers_details where Mid = @mid);
+
+
+select @purpose = Purpose, @amount = Amount,@date= Date_of_expense from Family_Expense_details_table where Eid = @eid;
+select @name,@purpose,@amount,@date;
+end
+
+
+
+
+
+*****************************************************************************************************************************************
+
+create proc edit_family_expense_details
+(@eid int,
+@name varchar(40),
+@purpose varchar(40),
+@amount int,
+@date date
+)
+as
+begin
+
+update Family_Expense_details_table set Mid = (select Mid from FamilyMembers_details where name = @name),purpose=@purpose,amount=@amount,Date_of_expense = @date where Eid = @eid;
+end
