@@ -1,0 +1,20 @@
+  <asp:TemplateField HeaderText="Edit data">
+                        <ItemTemplate>
+                            <asp:HyperLink ID="HyperLink1" runat="server"  ></asp:HyperLink>
+                            <asp:ImageButton ImageUrl="~/image png/edit.png" CommandName="edit" ToolTip="edit" runat="server" width="20px" Height="20px"/>
+                        </ItemTemplate>
+                  </asp:TemplateField>
+                   <asp:TemplateField  HeaderText="Delete">
+                        <ItemTemplate>
+                            <asp:HyperLink ID="HyperLink1" runat="server"  ></asp:HyperLink>
+                            <asp:ImageButton ImageUrl="~/image png/delete.png" CommandName="Delete" ToolTip="Delete" runat="server" width="20px" Height="20px"/>
+                        </ItemTemplate>
+                  </asp:TemplateField>
+
+
+
+<asp:HyperLinkField HeaderText="Edit data" DataNavigateUrlFields="eid" DataNavigateUrlFormatString="EditExpensedetails.aspx?eid={0}" Text="Edit" />
+                    <asp:HyperLinkField HeaderText="Delete" DataNavigateUrlFields="eid" DataNavigateUrlFormatString="DeleteExpensedetails.aspx?eid={0}" Text="Delete" />
+
+
+
